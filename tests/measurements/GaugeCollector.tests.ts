@@ -1,14 +1,8 @@
-import * as chai from 'chai';
+import { expect } from 'chai';
 
 import { GaugeCollector } from '../../src/measurements/index.js';
 
 describe('GaugeCollector', () => {
-  const { expect } = chai;
-
-  before(() => {
-    chai.should();
-  });
-
   it('should accumulate metrics with the same key', () => {
     const collector = new GaugeCollector();
     collector.measure({
@@ -70,7 +64,7 @@ describe('GaugeCollector', () => {
       name: 'test',
       value: 42,
     });
-    collector.flush().should.have.length(1);
-    collector.flush().should.have.length(0);
+    expect(collector.flush()).to.have.length(1);
+    expect(collector.flush()).have.length(0);
   });
 });

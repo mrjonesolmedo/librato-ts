@@ -1,16 +1,12 @@
 import assert from 'node:assert';
 
-import * as chai from 'chai';
+import { expect } from 'chai';
 import * as sinon from 'sinon';
 
 import type { SingleMeasurement } from '../src/index.js';
 import { Librato } from '../src/Librato.js';
 
 describe('Librato', () => {
-  before(() => {
-    chai.should();
-  });
-
   it('should not send metrics if simulate=true', async () => {
     const librato = new Librato();
     librato.init({
@@ -24,7 +20,7 @@ describe('Librato', () => {
     await librato.flush();
 
     sendMetricsStub.restore();
-    sendMetricsStub.calledOnce.should.equal(false);
+    expect(sendMetricsStub.calledOnce).to.equal(false);
   });
 
   it('should accumulate metrics even if not initialized', async () => {
@@ -41,15 +37,15 @@ describe('Librato', () => {
     await librato.flush();
 
     sendMetricsStub.restore();
-    sendMetricsStub.calledOnce.should.equal(true);
-    sendMetricsStub.firstCall.args[0].counters.should.have.length(1);
+    expect(sendMetricsStub.calledOnce).to.equal(true);
+    expect(sendMetricsStub.firstCall.args[0].counters).to.have.length(1);
     assert(sendMetricsStub.firstCall.args[0].counters[0]);
-    sendMetricsStub.firstCall.args[0].counters[0].name.should.equal('test');
-    sendMetricsStub.firstCall.args[0].counters[0].value.should.equal(1);
-    sendMetricsStub.firstCall.args[0].gauges.should.have.length(1);
+    expect(sendMetricsStub.firstCall.args[0].counters[0].name).to.equal('test');
+    expect(sendMetricsStub.firstCall.args[0].counters[0].value).to.equal(1);
+    expect(sendMetricsStub.firstCall.args[0].gauges).to.have.length(1);
     assert(sendMetricsStub.firstCall.args[0].gauges[0]);
-    sendMetricsStub.firstCall.args[0].gauges[0].name.should.equal('foo');
-    (sendMetricsStub.firstCall.args[0].gauges[0] as SingleMeasurement).value.should.equal(42);
+    expect(sendMetricsStub.firstCall.args[0].gauges[0].name).to.equal('foo');
+    expect((sendMetricsStub.firstCall.args[0].gauges[0] as SingleMeasurement).value).to.equal(42);
   });
 
   describe('increment', () => {
@@ -68,15 +64,15 @@ describe('Librato', () => {
       await librato.flush();
 
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
-      sendMetricsStub.firstCall.args[0].counters.should.have.length(1);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
+      expect(sendMetricsStub.firstCall.args[0].counters).to.have.length(1);
       assert(sendMetricsStub.firstCall.args[0].counters[0]);
-      sendMetricsStub.firstCall.args[0].counters[0].name.should.equal('test');
-      sendMetricsStub.firstCall.args[0].counters[0].value.should.equal(1);
+      expect(sendMetricsStub.firstCall.args[0].counters[0].name).to.equal('test');
+      expect(sendMetricsStub.firstCall.args[0].counters[0].value).to.equal(1);
       assert(sendMetricsStub.firstCall.args[0].counters[0].source);
-      sendMetricsStub.firstCall.args[0].counters[0].source.should.equal('foo');
+      expect(sendMetricsStub.firstCall.args[0].counters[0].source).to.equal('foo');
     });
 
     it('should allow increment with a custom value', async () => {
@@ -92,13 +88,13 @@ describe('Librato', () => {
       await librato.flush();
 
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
-      sendMetricsStub.firstCall.args[0].counters.should.have.length(1);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
+      expect(sendMetricsStub.firstCall.args[0].counters).to.have.length(1);
       assert(sendMetricsStub.firstCall.args[0].counters[0]);
-      sendMetricsStub.firstCall.args[0].counters[0].name.should.equal('test');
-      sendMetricsStub.firstCall.args[0].counters[0].value.should.equal(42);
+      expect(sendMetricsStub.firstCall.args[0].counters[0].name).to.equal('test');
+      expect(sendMetricsStub.firstCall.args[0].counters[0].value).to.equal(42);
     });
 
     it('should allow increment with a custom value and options', async () => {
@@ -116,15 +112,15 @@ describe('Librato', () => {
       await librato.flush();
 
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
       sendMetricsStub.restore();
-      sendMetricsStub.calledOnce.should.equal(true);
-      sendMetricsStub.firstCall.args[0].counters.should.have.length(1);
+      expect(sendMetricsStub.calledOnce).to.equal(true);
+      expect(sendMetricsStub.firstCall.args[0].counters).to.have.length(1);
       assert(sendMetricsStub.firstCall.args[0].counters[0]);
-      sendMetricsStub.firstCall.args[0].counters[0].name.should.equal('test');
-      sendMetricsStub.firstCall.args[0].counters[0].value.should.equal(42);
+      expect(sendMetricsStub.firstCall.args[0].counters[0].name).to.equal('test');
+      expect(sendMetricsStub.firstCall.args[0].counters[0].value).to.equal(42);
       assert(sendMetricsStub.firstCall.args[0].counters[0].source);
-      sendMetricsStub.firstCall.args[0].counters[0].source.should.equal('foo');
+      expect(sendMetricsStub.firstCall.args[0].counters[0].source).to.equal('foo');
     });
   });
 });
